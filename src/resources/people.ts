@@ -1,5 +1,13 @@
-import type { ExternalIds, Id, Images, Paged, Person, PersonCredits, PersonDetails } from '../types';
-import type { CallOptions, DetailsOptions, PageArg } from '../options';
+import type {
+  Id,
+  Paged,
+  Person,
+  PersonCredits,
+  PersonDetails,
+  PersonExternalIds,
+  PersonImages,
+} from '../types';
+import type { CallOptions, PageArg, PersonDetailsOptions } from '../options';
 import { pageOptions, seg, toParams } from '../query';
 import type { Requester } from '../transport';
 
@@ -7,7 +15,7 @@ import type { Requester } from '../transport';
 export class People {
   constructor(private readonly http: Requester) {}
 
-  details(id: Id, options?: DetailsOptions): Promise<PersonDetails> {
+  details(id: Id, options?: PersonDetailsOptions): Promise<PersonDetails> {
     return this.http.request(`/person/${seg(id)}`, toParams(options));
   }
   combinedCredits(id: Id, options?: CallOptions): Promise<PersonCredits> {
@@ -19,10 +27,11 @@ export class People {
   tvCredits(id: Id, options?: CallOptions): Promise<PersonCredits> {
     return this.http.request(`/person/${seg(id)}/tv_credits`, toParams(options));
   }
-  images(id: Id, options?: CallOptions): Promise<Images> {
+  /** Only `profiles` is filled. */
+  images(id: Id, options?: CallOptions): Promise<PersonImages> {
     return this.http.request(`/person/${seg(id)}/images`, toParams(options));
   }
-  externalIds(id: Id, options?: CallOptions): Promise<ExternalIds> {
+  externalIds(id: Id, options?: CallOptions): Promise<PersonExternalIds> {
     return this.http.request(`/person/${seg(id)}/external_ids`, toParams(options));
   }
   popular(page?: PageArg): Promise<Paged<Person>> {

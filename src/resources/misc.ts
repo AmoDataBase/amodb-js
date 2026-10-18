@@ -5,12 +5,13 @@ import type {
   GenreList,
   Id,
   Keyword,
+  KeywordMovies,
   NetworkDetails,
   WatchProviderCatalog,
   WatchProviderRegions,
 } from '../types';
-import type { CallOptions, WatchProvidersOptions } from '../options';
-import { seg, toParams } from '../query';
+import type { CallOptions, PageArg, WatchProvidersOptions } from '../options';
+import { pageOptions, seg, toParams } from '../query';
 import type { Requester } from '../transport';
 
 /** `client.genres` */
@@ -58,6 +59,10 @@ export class Keywords {
 
   details(id: Id, options?: CallOptions): Promise<Keyword> {
     return this.http.request(`/keyword/${seg(id)}`, toParams(options));
+  }
+  /** Movies that carry the keyword. Paged. */
+  movies(id: Id, page?: PageArg): Promise<KeywordMovies> {
+    return this.http.request(`/keyword/${seg(id)}/movies`, toParams(pageOptions(page)));
   }
 }
 

@@ -1,5 +1,5 @@
 import type {
-  CollectionSummary,
+  CollectionSearchResult,
   CompanySummary,
   Keyword,
   Movie,
@@ -28,7 +28,7 @@ export class Search {
   multi(query: string, options?: SearchOptions): Promise<Paged<MultiResult>> {
     return this.http.request('/search/multi', toParams({ query, ...options }));
   }
-  collection(query: string, options?: SearchOptions): Promise<Paged<CollectionSummary>> {
+  collection(query: string, options?: SearchOptions): Promise<Paged<CollectionSearchResult>> {
     return this.http.request('/search/collection', toParams({ query, ...options }));
   }
   company(query: string, options?: SearchOptions): Promise<Paged<CompanySummary>> {

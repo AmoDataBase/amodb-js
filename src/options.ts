@@ -50,34 +50,80 @@ export interface PageOptions extends CallOptions {
 /** Page options, or a bare page number. */
 export type PageArg = PageOptions | number;
 
-export type AppendToResponseValue =
+/**
+ * Values accepted by `appendToResponse`, per resource. The list is comma joined
+ * (up to 20 values). The API ignores unknown names, so the types list only the
+ * sections that exist.
+ */
+export type MovieAppend =
   | 'credits'
-  | 'aggregate_credits'
   | 'images'
   | 'videos'
   | 'keywords'
+  | 'translations'
   | 'external_ids'
-  | 'recommendations'
   | 'similar'
+  | 'recommendations'
   | 'reviews'
   | 'release_dates'
-  | 'content_ratings'
-  | 'translations'
-  | 'alternative_titles'
   | 'watch/providers'
+  | 'alternative_titles'
   | 'lists'
-  | 'changes'
+  | 'moods'
+  | 'soundtracks'
+  | 'ratings'
+  | 'wikidata'
+  | 'showtimes';
+
+export type TvAppend =
+  | 'credits'
+  | 'images'
+  | 'videos'
+  | 'keywords'
+  | 'translations'
+  | 'external_ids'
+  | 'similar'
+  | 'recommendations'
+  | 'reviews'
+  | 'content_ratings'
+  | 'watch/providers'
+  | 'alternative_titles'
+  | 'lists'
   | 'episode_groups'
   | 'moods'
   | 'soundtracks'
   | 'ratings'
   | 'wikidata'
-  | 'showtimes'
-  // Any other string is still accepted.
-  | (string & Record<never, never>);
+  | 'showtimes';
 
-export interface DetailsOptions extends CallOptions {
-  appendToResponse?: AppendToResponseValue[];
+export type PersonAppend = 'combined_credits' | 'movie_credits' | 'tv_credits' | 'external_ids' | 'images';
+
+export type SeasonAppend = 'credits' | 'images' | 'videos' | 'external_ids';
+
+export type EpisodeAppend = 'credits' | 'images' | 'videos' | 'external_ids' | 'translations';
+
+export interface MovieDetailsOptions extends CallOptions {
+  appendToResponse?: MovieAppend[];
+  /** ISO 3166-1 country code for the appended `showtimes` section. */
+  country?: string;
+}
+
+export interface TvDetailsOptions extends CallOptions {
+  appendToResponse?: TvAppend[];
+  /** ISO 3166-1 country code for the appended `showtimes` section. */
+  country?: string;
+}
+
+export interface PersonDetailsOptions extends CallOptions {
+  appendToResponse?: PersonAppend[];
+}
+
+export interface SeasonDetailsOptions extends CallOptions {
+  appendToResponse?: SeasonAppend[];
+}
+
+export interface EpisodeDetailsOptions extends CallOptions {
+  appendToResponse?: EpisodeAppend[];
 }
 
 export interface ImagesOptions extends CallOptions {
@@ -95,21 +141,18 @@ export interface MovieListOptions extends PageOptions {
 }
 
 export interface SearchMovieOptions extends PageOptions {
-  includeAdult?: boolean;
   region?: string;
   year?: number | string;
   primaryReleaseYear?: number | string;
 }
 
 export interface SearchTvOptions extends PageOptions {
-  includeAdult?: boolean;
   year?: number | string;
   firstAirDateYear?: number | string;
 }
 
-export interface SearchOptions extends PageOptions {
-  includeAdult?: boolean;
-}
+/** Options for `search.person`, `search.multi`, `search.collection`, `search.company` and `search.keyword`. */
+export type SearchOptions = PageOptions;
 
 export interface WatchProvidersOptions extends CallOptions {
   watchRegion?: string;
@@ -128,7 +171,6 @@ export interface DiscoverMovieParams {
   page?: number;
   region?: string;
   sort_by?: string;
-  include_adult?: boolean;
   include_video?: boolean;
   year?: number | string;
   primary_release_year?: number | string;
@@ -161,7 +203,6 @@ export interface DiscoverTvParams {
   language?: string | null;
   page?: number;
   sort_by?: string;
-  include_adult?: boolean;
   first_air_date_year?: number | string;
   'first_air_date.gte'?: string;
   'first_air_date.lte'?: string;
@@ -195,10 +236,26 @@ export interface DiscoverTvParams {
 export type TrendingMediaType = 'all' | 'movie' | 'tv' | 'person';
 export type TrendingWindow = 'day' | 'week';
 
-/** Values accepted by `find`. */
-export type ExternalSource = 'imdb_id' | 'tvdb_id' | 'wikidata_id' | 'kinopoisk_id';
+/**
+ * Values accepted by `find`. These resolve to titles or people: `imdb_id` (tt and
+ * nm ids), `tvdb_id`, `facebook_id`, `twitter_id`, `instagram_id`, `wikidata_id`
+ * (Q ids) and `kinopoisk_id`. The others are accepted and return empty arrays.
+ */
+export type ExternalSource =
+  | 'imdb_id'
+  | 'freebase_mid'
+  | 'freebase_id'
+  | 'tvdb_id'
+  | 'tvrage_id'
+  | 'facebook_id'
+  | 'twitter_id'
+  | 'instagram_id'
+  | 'tiktok_id'
+  | 'youtube_id'
+  | 'wikidata_id'
+  | 'kinopoisk_id';
 
-export type OmdbType = 'movie' | 'series' | 'episode';
+export type OmdbType = 'movie' | 'series';
 export type OmdbPlot = 'short' | 'full';
 
 export interface OmdbByIdOptions {

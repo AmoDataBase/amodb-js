@@ -199,23 +199,23 @@ describe('language', () => {
 describe('append_to_response and options', () => {
   it('joins appendToResponse with commas', async () => {
     const { client, calls } = setup();
-    await client.movies.details(550, { appendToResponse: ['credits', 'images', 'ratings', 'custom_value'] });
-    expect(calls[0]?.url).toContain('append_to_response=credits,images,ratings,custom_value');
+    await client.movies.details(550, { appendToResponse: ['credits', 'images', 'ratings', 'watch/providers'] });
+    expect(calls[0]?.u.searchParams.get('append_to_response')).toBe('credits,images,ratings,watch/providers');
   });
 
   it('maps camelCase options to snake_case and merges the params passthrough', async () => {
     const { client, calls } = setup();
     await client.search.movie('fight club', {
       page: 2,
-      includeAdult: true,
-      primaryReleaseYear: 1999,
+      year: 1999,
+      primaryReleaseYear: 1998,
       params: { region: 'US', page: 9 },
     });
     const q = calls[0]!.u.searchParams;
     expect(calls[0]?.u.pathname).toBe('/3/search/movie');
     expect(q.get('query')).toBe('fight club');
-    expect(q.get('include_adult')).toBe('true');
-    expect(q.get('primary_release_year')).toBe('1999');
+    expect(q.get('year')).toBe('1999');
+    expect(q.get('primary_release_year')).toBe('1998');
     expect(q.get('region')).toBe('US');
     expect(q.get('page')).toBe('2');
   });
@@ -256,8 +256,9 @@ describe('endpoints', () => {
     ['movies.ratings', (c) => c.movies.ratings(550), '/3/movie/550/ratings'],
     ['movies.wikidata', (c) => c.movies.wikidata(550), '/3/movie/550/wikidata'],
     ['movies.showtimes', (c) => c.movies.showtimes(550, 'DE'), '/3/movie/550/showtimes'],
+    ['movies.latest', (c) => c.movies.latest(), '/3/movie/latest'],
+    ['movies.lists', (c) => c.movies.lists(550), '/3/movie/550/lists'],
     ['tv.details', (c) => c.tv.details(1399), '/3/tv/1399'],
-    ['tv.aggregateCredits', (c) => c.tv.aggregateCredits(1399), '/3/tv/1399/aggregate_credits'],
     ['tv.credits', (c) => c.tv.credits(1399), '/3/tv/1399/credits'],
     ['tv.images', (c) => c.tv.images(1399), '/3/tv/1399/images'],
     ['tv.videos', (c) => c.tv.videos(1399), '/3/tv/1399/videos'],
@@ -280,6 +281,12 @@ describe('endpoints', () => {
     ['tv.soundtracks', (c) => c.tv.soundtracks(1399), '/3/tv/1399/soundtracks'],
     ['tv.ratings', (c) => c.tv.ratings(1399), '/3/tv/1399/ratings'],
     ['tv.wikidata', (c) => c.tv.wikidata(1399), '/3/tv/1399/wikidata'],
+    ['tv.showtimes', (c) => c.tv.showtimes(1399), '/3/tv/1399/showtimes'],
+    ['tv.latest', (c) => c.tv.latest(), '/3/tv/latest'],
+    ['tv.lists', (c) => c.tv.lists(1399), '/3/tv/1399/lists'],
+    ['tv.episodeGroups', (c) => c.tv.episodeGroups(1399), '/3/tv/1399/episode_groups'],
+    ['tv.seasonCredits', (c) => c.tv.seasonCredits(1399, 2), '/3/tv/1399/season/2/credits'],
+    ['tv.episodeCredits', (c) => c.tv.episodeCredits(1399, 2, 5), '/3/tv/1399/season/2/episode/5/credits'],
     ['people.details', (c) => c.people.details(287), '/3/person/287'],
     ['people.combinedCredits', (c) => c.people.combinedCredits(287), '/3/person/287/combined_credits'],
     ['people.movieCredits', (c) => c.people.movieCredits(287), '/3/person/287/movie_credits'],
@@ -303,6 +310,7 @@ describe('endpoints', () => {
     ['companies.details', (c) => c.companies.details(1), '/3/company/1'],
     ['networks.details', (c) => c.networks.details(49), '/3/network/49'],
     ['keywords.details', (c) => c.keywords.details(818), '/3/keyword/818'],
+    ['keywords.movies', (c) => c.keywords.movies(818), '/3/keyword/818/movies'],
     ['find', (c) => c.find('tt0137523', 'imdb_id'), '/3/find/tt0137523'],
     ['configuration', (c) => c.configuration(), '/3/configuration'],
     ['certifications.movie', (c) => c.certifications.movie(), '/3/certification/movie/list'],
@@ -320,11 +328,13 @@ describe('endpoints', () => {
     expect(calls[0]?.u.pathname).toBe(pathname);
   });
 
-  it('sends country for showtimes', async () => {
+  it('sends country for showtimes only when given', async () => {
     const { client, calls } = setup();
     await client.movies.showtimes(550, 'DE', { language: 'de-DE' });
+    await client.movies.showtimes(550);
     expect(calls[0]?.u.searchParams.get('country')).toBe('DE');
     expect(calls[0]?.u.searchParams.get('language')).toBe('de-DE');
+    expect(calls[1]?.u.searchParams.has('country')).toBe(false);
   });
 
   it('sends external_source for find', async () => {
@@ -340,7 +350,7 @@ describe('endpoints', () => {
       sort_by: 'popularity.desc',
       'vote_average.gte': 7,
       with_genres: [28, 12],
-      include_adult: false,
+      include_video: false,
       page: 2,
       some_new_filter: 'x',
     });
@@ -348,7 +358,7 @@ describe('endpoints', () => {
     expect(q.get('sort_by')).toBe('popularity.desc');
     expect(q.get('vote_average.gte')).toBe('7');
     expect(q.get('with_genres')).toBe('28,12');
-    expect(q.get('include_adult')).toBe('false');
+    expect(q.get('include_video')).toBe('false');
     expect(q.get('some_new_filter')).toBe('x');
   });
 

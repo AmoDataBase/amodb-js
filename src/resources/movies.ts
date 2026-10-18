@@ -1,10 +1,11 @@
 import type {
-  AlternativeTitles,
   Credits,
-  ExternalIds,
   Id,
   Images,
+  MediaLists,
+  MovieAlternativeTitles,
   MovieDetails,
+  MovieExternalIds,
   MovieKeywords,
   Moods,
   Movie,
@@ -21,8 +22,8 @@ import type {
 } from '../types';
 import type {
   CallOptions,
-  DetailsOptions,
   ImagesOptions,
+  MovieDetailsOptions,
   MovieListOptions,
   PageArg,
   VideosOptions,
@@ -34,8 +35,12 @@ import type { Requester } from '../transport';
 export class Movies {
   constructor(private readonly http: Requester) {}
 
-  details(id: Id, options?: DetailsOptions): Promise<MovieDetails> {
+  details(id: Id, options?: MovieDetailsOptions): Promise<MovieDetails> {
     return this.http.request(`/movie/${seg(id)}`, toParams(options));
+  }
+  /** The newest movie in the catalog. */
+  latest(options?: CallOptions): Promise<MovieDetails> {
+    return this.http.request('/movie/latest', toParams(options));
   }
   credits(id: Id, options?: CallOptions): Promise<Credits> {
     return this.http.request(`/movie/${seg(id)}/credits`, toParams(options));
@@ -49,7 +54,7 @@ export class Movies {
   keywords(id: Id, options?: CallOptions): Promise<MovieKeywords> {
     return this.http.request(`/movie/${seg(id)}/keywords`, toParams(options));
   }
-  externalIds(id: Id, options?: CallOptions): Promise<ExternalIds> {
+  externalIds(id: Id, options?: CallOptions): Promise<MovieExternalIds> {
     return this.http.request(`/movie/${seg(id)}/external_ids`, toParams(options));
   }
   recommendations(id: Id, page?: PageArg): Promise<Paged<Movie>> {
@@ -58,6 +63,7 @@ export class Movies {
   similar(id: Id, page?: PageArg): Promise<Paged<Movie>> {
     return this.http.request(`/movie/${seg(id)}/similar`, toParams(pageOptions(page)));
   }
+  /** Only a few titles have reviews, so the list is empty for most. */
   reviews(id: Id, page?: PageArg): Promise<Paged<Review>> {
     return this.http.request(`/movie/${seg(id)}/reviews`, toParams(pageOptions(page)));
   }
@@ -70,8 +76,13 @@ export class Movies {
   translations(id: Id, options?: CallOptions): Promise<Translations> {
     return this.http.request(`/movie/${seg(id)}/translations`, toParams(options));
   }
-  alternativeTitles(id: Id, options?: CallOptions & { country?: string }): Promise<AlternativeTitles> {
+  /** The list is often empty. */
+  alternativeTitles(id: Id, options?: CallOptions): Promise<MovieAlternativeTitles> {
     return this.http.request(`/movie/${seg(id)}/alternative_titles`, toParams(options));
+  }
+  /** User lists that contain the movie. Paged. */
+  lists(id: Id, page?: PageArg): Promise<MediaLists> {
+    return this.http.request(`/movie/${seg(id)}/lists`, toParams(pageOptions(page)));
   }
 
   popular(page?: PageArg | MovieListOptions): Promise<Paged<Movie>> {
@@ -100,8 +111,11 @@ export class Movies {
   wikidata(id: Id, options?: CallOptions): Promise<Wikidata> {
     return this.http.request(`/movie/${seg(id)}/wikidata`, toParams(options));
   }
-  /** Cinema showtimes when known. `country` is an ISO 3166-1 code such as `DE`. */
-  showtimes(id: Id, country: string, options?: CallOptions): Promise<Showtimes> {
+  /**
+   * Cinema showtimes. Without `country` the reply holds per-country counts in
+   * `countries`. With an ISO 3166-1 code such as `RU`, `results` holds the venues.
+   */
+  showtimes(id: Id, country?: string, options?: CallOptions): Promise<Showtimes> {
     return this.http.request(`/movie/${seg(id)}/showtimes`, toParams(options, { country }));
   }
 }

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Amodb, AmodbError } from '../src/index';
+import { omdbSearch, omdbSeries } from './fixtures';
 import { KEY, json, mockFetch } from './helpers';
 
 const fightClub = {
@@ -88,11 +89,37 @@ describe('omdb', () => {
     expect(result.totalResults).toBe('1');
   });
 
+  it('reads a series with totalSeasons and none of the movie only fields', async () => {
+    const { client, calls } = setup(json(omdbSeries));
+    const series = await client.omdb.byId('tt0903747');
+    expect(calls[0]?.u.searchParams.get('i')).toBe('tt0903747');
+    expect(series.Type).toBe('series');
+    expect(series.totalSeasons).toBe('5');
+    expect(series).not.toHaveProperty('DVD');
+    expect(series).not.toHaveProperty('BoxOffice');
+    expect(series.Ratings[0]?.Source).toBe('Internet Movie Database');
+  });
+
+  it('reads search hits with a string totalResults', async () => {
+    const { client } = setup(json(omdbSearch));
+    const found = await client.omdb.search('matrix', { type: 'movie' });
+    expect(found.Search).toHaveLength(2);
+    expect(found.Search[0]).toMatchObject({ Title: 'The Matrix', Year: '1999', imdbID: 'tt0133093', Type: 'movie' });
+    expect(found.totalResults).toBe('23');
+  });
+
+  it('rejects the episode type at compile time', () => {
+    const { client } = setup();
+    // @ts-expect-error episodes are not offered; checked by `npm run typecheck`
+    void client.omdb.byTitle('x', { type: 'episode' });
+    expect(true).toBe(true);
+  });
+
   it('passes extra params and never lets them replace the key', async () => {
     const { client, calls } = setup();
-    await client.omdb.byId('tt0944947', { params: { Season: 1, apikey: 'other' } });
+    await client.omdb.byId('tt0944947', { params: { r: 'json', apikey: 'other' } });
     const q = calls[0]!.u.searchParams;
-    expect(q.get('Season')).toBe('1');
+    expect(q.get('r')).toBe('json');
     expect(q.get('apikey')).toBe(KEY);
   });
 
