@@ -17,6 +17,8 @@ Align extension types with the live API.
 - Removed `tv.aggregateCredits`, `AggregateCredits`, the `aggregate_credits` and `changes` append values, the open string fallback for append values, the `type` field of TV details, the `country` option of `movies.alternativeTitles`, the `includeAdult` options and the OMDb `episode` type. The API does not offer them or ignores them.
 - README examples use the real field names and describe the paths that are not offered.
 - Tests use real trimmed response bodies and cover the new types and methods.
+- Add CI, release and Dependabot workflows.
+- Repository and package URLs now point to the amodb-dev organization.
 
 ## 0.1.0 - 2026-10-18
 

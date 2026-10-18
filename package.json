@@ -16,11 +16,11 @@
   ],
   "homepage": "https://amodb.dev",
   "bugs": {
-    "url": "https://github.com/netlistenany-bot/amodb-js/issues"
+    "url": "https://github.com/amodb-dev/amodb-js/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/netlistenany-bot/amodb-js.git"
+    "url": "git+https://github.com/amodb-dev/amodb-js.git"
   },
   "license": "MIT",
   "author": "amodb",

@@ -1,0 +1,6 @@
+{
+  "name": "amodb-js",
+  "description": "JavaScript and TypeScript client for the amodb movie and TV metadata API. TMDB v3 and OMDb compatible, zero dependencies.",
+  "homepage": "https://amodb.dev",
+  "topics": ["amodb", "tmdb", "omdb", "typescript", "javascript", "movie-api", "tv-api", "api-client", "sdk", "nodejs"]
+}
