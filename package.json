@@ -1,0 +1,65 @@
+{
+  "name": "amodb",
+  "version": "0.1.0",
+  "description": "TypeScript and JavaScript client for the amodb movie and TV metadata API. TMDB v3 and OMDb compatible, zero dependencies.",
+  "keywords": [
+    "amodb",
+    "tmdb",
+    "omdb",
+    "typescript",
+    "javascript",
+    "movie-api",
+    "tv-api",
+    "api-client",
+    "sdk",
+    "nodejs"
+  ],
+  "homepage": "https://amodb.dev",
+  "bugs": {
+    "url": "https://github.com/netlistenany-bot/amodb-js/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/netlistenany-bot/amodb-js.git"
+  },
+  "license": "MIT",
+  "author": "amodb",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.12"
+  }
+}

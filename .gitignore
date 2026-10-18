@@ -1,0 +1,16 @@
+node_modules/
+dist/
+build/
+coverage/
+.vitest-cache/
+*.tsbuildinfo
+*.log
+npm-debug.log*
+.env
+.env.local
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.tgz
