@@ -1,8 +1,8 @@
 <p align="center">
   <a href="https://amodb.dev">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/amodb-dev/.github/main/assets/lockup-dark.png">
-      <img src="https://raw.githubusercontent.com/amodb-dev/.github/main/assets/lockup-light.png" alt="amodb" width="260">
+      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/AmoDataBase/.github/main/assets/lockup-dark.png">
+      <img src="https://raw.githubusercontent.com/AmoDataBase/.github/main/assets/lockup-light.png" alt="amodb" width="260">
     </picture>
   </a>
 </p>
@@ -12,9 +12,9 @@
 <p align="center">JavaScript and TypeScript client for the amodb movie and TV metadata API.</p>
 
 <p align="center">
-  <a href="https://github.com/amodb-dev/amodb-js/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/amodb-dev/amodb-js/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://github.com/AmoDataBase/amodb-js/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/AmoDataBase/amodb-js/actions/workflows/ci.yml/badge.svg"></a>
   <a href="https://www.npmjs.com/package/amodb"><img alt="npm version" src="https://img.shields.io/npm/v/amodb"></a>
-  <a href="https://github.com/amodb-dev/amodb-js/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/amodb-dev/amodb-js"></a>
+  <a href="https://github.com/AmoDataBase/amodb-js/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/AmoDataBase/amodb-js"></a>
 </p>
 
 The official client for [amodb](https://amodb.dev), a movie and TV metadata API that is compatible with TMDB v3 and OMDb.
@@ -432,10 +432,10 @@ Tests use a mocked `fetch` and never touch the network.
 - Docs: https://amodb.dev/docs
 - Pricing: https://amodb.dev/pricing
 - Status: https://amodb.dev/status
-- Issues: https://github.com/amodb-dev/amodb-js/issues
-- Changelog: https://github.com/amodb-dev/amodb-js/blob/main/CHANGELOG.md
-- Security: https://github.com/amodb-dev/amodb-js/blob/main/SECURITY.md
-- Organization: https://github.com/amodb-dev
+- Issues: https://github.com/AmoDataBase/amodb-js/issues
+- Changelog: https://github.com/AmoDataBase/amodb-js/blob/main/CHANGELOG.md
+- Security: https://github.com/AmoDataBase/amodb-js/blob/main/SECURITY.md
+- Organization: https://github.com/AmoDataBase
 
 ## License
 

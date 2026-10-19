@@ -18,7 +18,7 @@ Align extension types with the live API.
 - README examples use the real field names and describe the paths that are not offered.
 - Tests use real trimmed response bodies and cover the new types and methods.
 - Add CI, release and Dependabot workflows.
-- Repository and package URLs now point to the amodb-dev organization.
+- Repository and package URLs now point to the AmoDataBase organization.
 
 ## 0.1.0 - 2026-10-18
 
